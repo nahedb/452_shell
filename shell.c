@@ -11,7 +11,7 @@ int display_prompt(){
 }
 
 int read_commands(char* cmd, char* parm){
-    char command[35]
+    char command[35];
     fgets(command, 35, fp);
     cmd = strtok(command, " ");
     parm = strtok(NULL, " ");
@@ -21,7 +21,7 @@ int read_commands(char* cmd, char* parm){
 int main(int argc, char* argv[]) 
 {
     printf("Welcome to my Shell! \nPlease enter a command.");
-    pid_t pid
+    pid_t pid;
     char* command, parm;
     int * status;
     while(1){
