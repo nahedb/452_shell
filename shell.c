@@ -7,15 +7,15 @@ int display_prompt(){
     char hostname[1024];
     gethostname(hostname, 1023);
     printf("[%s]: ",hostname);
-
+    return 0;
 }
 
 int read_commands(char* cmd, char* parm){
     char command[35];
-    fgets(command, 35, fp);
+    fgets(command, 35, stdin);
     cmd = strtok(command, " ");
     parm = strtok(NULL, " ");
-
+    return 0;
 }
 
 int main(int argc, char* argv[]) 
@@ -44,5 +44,5 @@ int main(int argc, char* argv[])
         }
 
     }
-    
+    return 0;
 }
