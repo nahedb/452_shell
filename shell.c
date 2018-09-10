@@ -10,10 +10,11 @@ int display_prompt(){
 
 }
 
-int read_commands(char* cmd){
+int read_commands(char* cmd, char* parm){
     char command[35]
     fgets(command, 35, fp);
-    cmd** = &command;
+    cmd = strtok(command, " ");
+    parm = strtok(NULL, " ");
 
 }
 
@@ -21,10 +22,11 @@ int main(int argc, char* argv[])
 {
     printf("Welcome to my Shell! \nPlease enter a command.");
     pid_t pid
-    char* command;
+    char* command, parm;
+    int * status;
     while(1){
         display_prompt();
-        read_commands(&command);
+        read_commands(&command, &parm);
         if(command == "quit"){
             break;
         }
@@ -34,7 +36,7 @@ int main(int argc, char* argv[])
             exit(1); 
         }
         else if (pid){
-            //Finish wait
+            waitpid(pid, &status, 0);
         }
         else{
             execvp(command, &command);
