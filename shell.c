@@ -1,5 +1,6 @@
 #include <stdio.h> 
 #include <sys/types.h> 
+#include <string.h>
 #include <unistd.h> 
 #include <stdlib.h>
 
@@ -10,16 +11,16 @@ int display_prompt(){
     return 0;
 }
 
-int read_commands(char* cmd, char** parm){
-    char * enter = strtok(cmd, '\n');
-    if(enter != NULL){
-        enter = '\0';
-    }
+int read_commands(char* cmd, char** token){
+    char *pos;
+    if((pos=strchr(cmd, '\n')) != NULL){
+        *pos = '\0';
+    }   
     int count = 0;
     char * tempcmd;
     tempcmd = strtok(NULL, " ");
-    while(parm != NULL){
-        parm[count] = tempcmd;
+    while(tempcmd != NULL){
+        token[count] = tempcmd;
         tempcmd = strtok(NULL, " ");
         count++;
     }
@@ -31,13 +32,21 @@ int main(int argc, char* argv[])
     printf("Welcome to my Shell! \nPlease enter a command.\n");
     pid_t pid;
     char command[300], quit[5] = "quit";
-    char* parm[300];
-    int * status;
+    char* token = NULL;
+    int status;
     while(1){
         display_prompt();
         fgets(command, 300, stdin);
-        read_commands(command, &parm);
-        if(strcmp(&parm[0], quit) == 0){
+        puts("Made it 2");
+        while(command[0] =='\n' || command[0] == ' '){
+            display_prompt();
+            fgets(command, 256, stdin);
+        }   
+        // read_commands(command, &parm);
+        puts("Made it 1");
+        strtok(command, "\n");
+        printf("%s", command);
+        if(strcmp(&token[0], quit) == 0){
             printf("Quit");
             break;
         }
@@ -50,7 +59,7 @@ int main(int argc, char* argv[])
             waitpid(pid, &status, 0);
         }
         else{
-            execvp(parm[0], parm);
+            execvp(&token[0], &token);
             printf("Command not known.");
             exit(1);
         }
