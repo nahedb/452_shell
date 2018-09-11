@@ -11,7 +11,10 @@ int display_prompt(){
 }
 
 int read_commands(char* cmd, char** parm){
-    cmd = strtok(cmd, " ");
+    char * enter = strtok(cmd, '\n');
+    if(enter != NULL){
+        enter = '\0';
+    }
     int count = 0;
     char * tempcmd;
     tempcmd = strtok(NULL, " ");
@@ -27,15 +30,14 @@ int main(int argc, char* argv[])
 {
     printf("Welcome to my Shell! \nPlease enter a command.\n");
     pid_t pid;
-    char command[300];
-    char* parm, quit;
+    char command[300], quit[5] = "quit";
+    char* parm[300];
     int * status;
-    quit = "quit";
     while(1){
         display_prompt();
         fgets(command, 300, stdin);
-        read_commands(&command, &parm);
-        if(strcmp(command, quit) == 0){
+        read_commands(command, &parm);
+        if(strcmp(&parm[0], quit) == 0){
             printf("Quit");
             break;
         }
@@ -48,7 +50,7 @@ int main(int argc, char* argv[])
             waitpid(pid, &status, 0);
         }
         else{
-            execlp(command, &parm, 0);
+            execvp(parm[0], parm);
             printf("Command not known.");
             exit(1);
         }
