@@ -37,17 +37,14 @@ int main(int argc, char* argv[])
     while(1){
         display_prompt();
         fgets(command, 300, stdin);
-        puts("Made it 2");
         while(command[0] =='\n' || command[0] == ' '){
             display_prompt();
             fgets(command, 256, stdin);
         }   
         // read_commands(command, &parm);
-        puts("Made it 1");
-        strtok(command, "\n");
-        printf("%s", command);
+        token = strtok(command, "\n");
         if(strcmp(&token[0], quit) == 0){
-            printf("Quit");
+            printf("Quit\n");
             break;
         }
         pid = fork();
@@ -60,7 +57,7 @@ int main(int argc, char* argv[])
         }
         else{
             execvp(&token[0], &token);
-            printf("Command not known.");
+            printf("Command not known.\n");
             exit(1);
         }
 
