@@ -41,7 +41,6 @@ int main(int argc, char* argv[])
             display_prompt();
             fgets(command, 256, stdin);
         }   
-        // read_commands(command, &parm);
         token = strtok(command, "\n");
         if(strcmp(&token[0], quit) == 0){
             printf("Quit\n");
@@ -56,7 +55,13 @@ int main(int argc, char* argv[])
             waitpid(pid, &status, 0);
         }
         else{
-            execvp(&token[0], &token);
+
+            argv = .split
+            argv[0] = "ls"; 
+            argv[1] = "-l";
+            argv[2] = NULL;
+            // printf("%s\n", token);
+            execvp(token, argv);
             printf("Command not known.\n");
             exit(1);
         }
