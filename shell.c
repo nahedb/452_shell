@@ -18,12 +18,13 @@ int read_commands(char* cmd, char** token){
     }   
     int count = 0;
     char * tempcmd;
-    tempcmd = strtok(NULL, " ");
+    tempcmd = strtok(cmd, " ");
     while(tempcmd != NULL){
         token[count] = tempcmd;
         tempcmd = strtok(NULL, " ");
         count++;
     }
+    token[count] = NULL;
     return 0;
 }
 
@@ -31,20 +32,18 @@ int main(int argc, char* argv[])
 {
     printf("Welcome to my Shell! \nPlease enter a command.\n");
     pid_t pid;
-    char command[300], quit[5] = "quit";
-    char* token = NULL;
+    char command[300];
+    char* token[15];
     int status;
     while(1){
         display_prompt();
         fgets(command, 300, stdin);
         while(command[0] =='\n' || command[0] == ' '){
             display_prompt();
-            fgets(command, 256, stdin);
+            fgets(command, 300, stdin);
         }   
-        // read_commands(command, &parm);
-        token = strtok(command, "\n");
-        if(strcmp(&token[0], quit) == 0){
-            printf("Quit\n");
+        read_commands(command, token);
+        if(strcmp(token[0], "quit") == 0){
             break;
         }
         pid = fork();
@@ -56,7 +55,7 @@ int main(int argc, char* argv[])
             waitpid(pid, &status, 0);
         }
         else{
-            execvp(&token[0], &token);
+            execvp(token[0], token);
             printf("Command not known.\n");
             exit(1);
         }
