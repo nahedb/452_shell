@@ -53,9 +53,9 @@ int main(int argc, char* argv[]) {
     char command[300];
     
     struct rusage x; 
-    struct timeval y;
-    double start;
-    double end;
+    struct timeval start;
+    struct timeval end;
+    
 
     //Token is a char array to store the tokenized
     //command from the user.
@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
         pid = fork();
         
         getrusage(RUSAGE_SELF, &x);
-        start=x.ru_utime.tv_usec;
+        start=x.ru_utime;
 
         //Failed fork catch.
         if(pid < 0){
@@ -96,9 +96,9 @@ int main(int argc, char* argv[]) {
             waitpid(pid, &status, 0);
 
             getrusage(RUSAGE_SELF, &x);
-            end = x.ru_utime.tv_usec;
-            printf("User CPU time was %f microseconds\n", end - start);
-
+            end = x.ru_utime;
+            printf("User CPU time was: %ld.%ds\n", end.tv_sec-start.tv_sec, end.tv_usec-start.tv_usec);
+            printf("There where %ld involuntary context switches.\n", x.ru_nivcsw);
         }//Child Runs.
         else{
 
